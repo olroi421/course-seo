@@ -1,7 +1,4 @@
-
----
-
-# Лекція 4: Schema.org та structured data
+# Лекція 04: Schema.org та structured data
 
 ## Вступ
 
