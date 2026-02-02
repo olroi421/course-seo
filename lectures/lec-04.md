@@ -504,13 +504,6 @@ graph TD
     G --> L[OpeningHours]
     G --> M[GeoCoordinates]
 
-    style A fill:#e1f5ff
-    style B fill:#fff4e1
-    style C fill:#fff4e1
-    style D fill:#fff4e1
-    style E fill:#fff4e1
-    style F fill:#fff4e1
-    style G fill:#fff4e1
 ```
 
 ## 4. Інструменти валідації
@@ -913,10 +906,6 @@ graph TD
     E --> G
     F --> G
 
-    style A fill:#e1f5ff
-    style D fill:#fff4e1
-    style E fill:#fff4e1
-    style F fill:#fff4e1
 ```
 
 ## Висновки

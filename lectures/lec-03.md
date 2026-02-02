@@ -96,10 +96,6 @@ graph TD
     E --> G[H4: Деталізація 1.1.1]
     C --> H[H3: Підрозділ 2.1]
 
-    style A fill:#e1f5ff
-    style B fill:#fff4e1
-    style C fill:#fff4e1
-    style D fill:#fff4e1
 ```
 
 ### Оптимізація заголовків під Featured Snippets
@@ -601,11 +597,6 @@ graph LR
     C --> D[Збереження link equity]
     C --> E[Збереження позицій у пошуку]
 
-    style A fill:#ffe1e1
-    style B fill:#fff4e1
-    style C fill:#e1ffe1
-    style D fill:#e1f5ff
-    style E fill:#e1f5ff
 ```
 
 ## 5. Internal linking: стратегії, anchor texts, link equity distribution
@@ -646,8 +637,6 @@ graph TD
     C -->|0.5 PR| E
     D -->|0.5 PR| E
 
-    style A fill:#e1f5ff
-    style E fill:#ffe1e1
 ```
 
 ### Типи внутрішніх посилань
