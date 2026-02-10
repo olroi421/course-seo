@@ -6,10 +6,12 @@
 
 | Тема лекції | Кількість годин |
 |------|------|
-| [Лекція 01: Вступ до SEO та принципи роботи пошукових систем](lectures/lec-01.md) | 2 |
-| [Лекція 02: Алгоритми ранжування та SERP features](lectures/lec-02.md) | 2 |
-| [Лекція 03: HTML-структура та on-page елементи](lectures/lec-03.md) | 2 |
-| [Лекція 04: Schema.org та structured data](lectures/lec-04.md) | 2 |
+| [Лекція 01 Вступ до SEO та принципи роботи пошукових систем](lectures/lec-01.md) | 2 |
+| [Лекція 02 Алгоритми ранжування та SERP features](lectures/lec-02.md) | 2 |
+| [Лекція 03 HTML-структура та on-page елементи](lectures/lec-03.md) | 2 |
+| [Лекція 04 Schema.org та structured data](lectures/lec-04.md) | 2 |
+| [Лекція 05 Core Web Vitals та продуктивність](lectures/lec-05.md) | 2 |
+| [Лекція 06 Технічне SEO — crawling та indexing](lectures/lec-06.md) | 2 |
 
 ---
 
