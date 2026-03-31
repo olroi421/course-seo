@@ -1,200 +1,307 @@
-# Google Analytics 4 — основи
-
-
+# Google Analytics 4 — основи 📊
 
 ---
 
-## Чому GA4 — це не просто «новий дизайн»
+## UA vs GA4: зміна парадигми
 
-### Universal Analytics → Google Analytics 4
+**Universal Analytics** (2012–2023) — орієнтований на сесії
 
-| | Universal Analytics | Google Analytics 4 |
+**Google Analytics 4** (з 2020) — орієнтований на події
+
+> 1 липня 2023 — офіційне вимкнення Universal Analytics
+
+Це не просто оновлення інтерфейсу — це **зміна парадигми**
+
+---
+
+## Чому GA4, а не UA?
+
+- 📱 Зростання мобільного трафіку
+- 🔗 Мультиканальна поведінка користувачів
+- 🍪 Посилення вимог до приватності даних (GDPR)
+- 🤖 Інтеграція машинного навчання
+- 📲 Єдина платформа для вебу та мобільних застосунків
+
+---
+
+## Порівняння архітектур
+
+```mermaid
+graph TD
+    A[Universal Analytics] --> B[Session-based model]
+    B --> C[Pageviews]
+    B --> D[Events]
+    B --> E[Transactions]
+
+    F[Google Analytics 4] --> G[Event-based model]
+    G --> H[All interactions = Events]
+    H --> I[page_view event]
+    H --> J[click event]
+    H --> K[purchase event]
+```
+
+---
+
+## Ключові відмінності UA vs GA4
+
+| Аспект | Universal Analytics | Google Analytics 4 |
 |---|---|---|
-| Модель даних | Сесійна | Event-based |
-| Основна одиниця | Сесія | Подія |
-| Платформи | Тільки веб | Веб + iOS + Android |
-| BigQuery | Платно | Безкоштовно |
-| Cookies | Залежить | Мінімальна залежність |
-
-> У липні 2023 Google повністю припинив обробку даних у Universal Analytics.
+| Модель даних | Сесії | Події |
+| Ідентифікація | Cookie / Client ID | User ID spaces + signals |
+| Звіти | Преконфігуровані | Explorations (ad-hoc) |
+| Кросплатформенність | Обмежена | Вбудована |
+| ML-функції | Базові | Глибока інтеграція |
+| Приватність | IP anonymization | Consent Mode v2 |
 
 ---
 
-## Дві моделі — два способи мислення
+## Event-based модель: що це означає?
+
+**Кожна взаємодія = подія з параметрами**
+
+- Перегляд сторінки → `page_view`
+- Клік на кнопку → кастомна подія
+- Покупка → `purchase`
+
+Немає ієрархії "сесія → pageview → event"
+
+Все рівноцінно та гнучко 🎯
+
+---
+
+## Структура події в GA4
 
 ```mermaid
 graph LR
-    subgraph UA — Сесійна модель
-        S1[Сесія відкрилась] --> H1[Хіт: pageview]
-        H1 --> H2[Хіт: event]
-        H2 --> H3[Хіт: transaction]
-        H3 --> S2[Сесія закрилась]
-    end
-    subgraph GA4 — Event-based модель
-        E1[page_view] --> E2[scroll]
-        E2 --> E3[add_to_cart]
-        E3 --> E4[purchase]
-    end
+    A[User Interaction] --> B[Event Name]
+    B --> C[Event Parameters]
+    C --> D[page_location]
+    C --> E[item_name]
+    C --> F[custom_param]
+
+    B --> H[Automatic Properties]
+    H --> I[timestamp]
+    H --> J[user_pseudo_id]
+    H --> K[session_id]
 ```
 
-**UA питає:** скільки сесій і скільки сторінок за сесію?
-
-**GA4 питає:** що робили користувачі і в якій послідовності?
+До кожної події можна додати **до 25 кастомних параметрів**
 
 ---
 
-## Ключові зміни в метриках
+## Переваги event-based підходу
 
-### Що зникло і що прийшло
-
-❌ **Показник відмов** (Bounce Rate) у класичному вигляді
-
-✅ **Рівень залученості** (Engagement Rate)
-
-✅ **Залучена сесія** = тривала > 10 сек **або** мала конверсію **або** ≥ 2 перегляди
+- **Гнучкість** — власні події з будь-якими параметрами
+- **Уніфікація** — немає різних "типів hit", все є подіями
+- **Кросплатформенність** — однакова структура для вебу та застосунків
+- **ML-готовність** — структуровані дані для предиктивних моделей
 
 ---
 
-🔄 Показник відмов = 100% − Engagement Rate
+## Сесії в GA4: як вони рахуються?
+
+Нова сесія починається при:
+
+- 🆕 Першому відвідуванні сайту
+- ⏰ 30 хвилинах неактивності
+- 🔗 Зміні UTM-параметрів кампанії
+
+**Engaged session** — сесія тривалістю >10 сек або з конверсією або з 2+ переглядами
+
+На відміну від UA: сесія **не скидається** о півночі
 
 ---
 
-## Анатомія події в GA4
+## Ієрархія GA4: Account → Property → Stream
 
 ```mermaid
 graph TD
-    E[🎯 Подія: purchase] --> N[event_name: purchase]
-    E --> V[value: 2850.00]
-    E --> C[currency: UAH]
-    E --> T[transaction_id: T-001]
-    E --> I[items: масив товарів]
-    E --> U[User ID]
-    E --> Sess[Session ID]
-```
+    A[GA4 Account] --> B[Property 1]
+    A --> C[Property 2]
+    B --> D[Web Data Stream]
+    B --> E[iOS App Stream]
+    B --> F[Android App Stream]
+    C --> G[Web Data Stream]
 
-**Кожен рядок у базі GA4 — це подія.**
-Сесії, користувачі, конверсії — похідні агрегати.
+    D --> H[Measurement ID: G-XXXXXXX]
+    E --> I[Firebase ID]
+    F --> J[Firebase ID]
+```
 
 ---
 
-## Ієрархія акаунту GA4
+## Property та Data Streams
+
+**Account** — організаційна одиниця (компанія / проєкт)
+
+**Property** — конкретний вебсайт або застосунок
+
+**Data Stream** — джерело даних:
+
+- 🌐 Web Stream → `G-XXXXXXXXXX`
+- 🍎 iOS App Stream → Firebase ID
+- 🤖 Android App Stream → Firebase ID
+
+Одна property може мати кілька streams одночасно
+
+---
+
+## Measurement ID
+
+Формат: `G-XXXXXXXXXX`
+
+- Прив'язаний до конкретного **Data Stream**, а не до property
+- Відрізняється від UA Tracking ID (`UA-XXXXXXXX-Y`)
+- Різні субдомени можуть мати різні Measurement ID
+
+---
+
+## Методи встановлення tracking
 
 ```mermaid
-graph TD
-    A[🏢 Account\nОбліковий запис] --> B[📦 Property\nРесурс]
-    B --> C[🌐 Web Data Stream]
-    B --> D[📱 iOS App Stream]
-    B --> E[🤖 Android App Stream]
-    C --> F[📌 Measurement ID\nG-XXXXXXXXXX]
+graph LR
+    A[Вебсайт] --> B{Метод]
+    B --> C[gtag.js]
+    B --> D[Google Tag Manager]
+    B --> E[Server-side GTM]
+    C --> F[Простота]
+    D --> G[Гнучкість]
+    E --> H[Приватність]
 ```
 
-**Property** — основний контейнер даних.
-**Data Stream** — джерело: сайт або застосунок.
-**Measurement ID** — ідентифікатор для коду відстеження.
+Для більшості проєктів рекомендується **Google Tag Manager** 🏆
 
 ---
 
-## Два способи встановлення
+## gtag.js: встановлення
 
-### Варіант A: gtag.js (пряме встановлення)
+Два блоки коду в `<head>`:
 
-```html
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+```javascript
+// 1. Завантаження бібліотеки
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXX"></script>
+
+// 2. Ініціалізація
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXX');
+  gtag('config', 'G-XXXXXX');
 </script>
 ```
 
-✅ Просто · ❌ Кожна зміна вимагає розробника
-
 ---
 
-### Варіант B: Google Tag Manager
-
-Один контейнер на сайті → всі теги через вебінтерфейс GTM.
-
-✅ Гнучко · ✅ Без розробника · ✅ Всі теги в одному місці
-
----
-
-## GTM — центр управління тегами
+## Google Tag Manager: архітектура
 
 ```mermaid
-graph LR
-    Site[🌐 Вебсайт] -->|Контейнер GTM| GTM[Google Tag Manager]
-    GTM --> GA4[📊 GA4]
-    GTM --> GAds[🎯 Google Ads]
-    GTM --> Meta[📘 Meta Pixel]
-    GTM --> Other[⚙️ Інші системи]
-```
+graph TD
+    A[Website] --> B[GTM Container Snippet]
+    B --> C[GTM Container]
+    C --> D[Tags]
+    C --> E[Triggers]
+    C --> F[Variables]
 
-**Ключова перевага:** маркетологи вносять зміни самостійно, не чекаючи розробника.
+    D --> G[GA4 Configuration Tag]
+    D --> H[GA4 Event Tags]
+
+    E --> J[Page View Trigger]
+    E --> K[Click Trigger]
+    E --> L[Custom Event Trigger]
+```
 
 ---
 
-## Enhanced Measurement — автоматичні події
+## GTM: три складові
 
-### Що відстежується без додаткового коду:
+**Tags** — фрагменти коду, що виконують дії
+(надсилають дані до GA4, завантажують пікселі)
 
-| Подія | Коли спрацьовує |
+**Triggers** — визначають, КОЛИ тег спрацьовує
+(завантаження сторінки, клік, кастомна подія)
+
+**Variables** — зберігають значення для тегів
+(Measurement ID, дані з dataLayer, URL)
+
+---
+
+## Enhanced Measurement ⚡
+
+Автоматичні події без написання коду:
+
+| Подія | Що відстежує |
 |---|---|
-| `page_view` | Завантаження сторінки |
 | `scroll` | Прокрутка до 90% сторінки |
-| `click` | Клік на зовнішнє посилання |
-| `file_download` | Завантаження PDF, ZIP, DOCX |
-| `video_start/complete` | Взаємодія з YouTube-відео |
-| `view_search_results` | Внутрішній пошук по сайту |
-
-⚙️ Налаштування: Admin → Data Streams → Enhanced Measurement
-
----
-
-## DebugView — тестування в реальному часі
-
-### Як увімкнути:
-
-- 🔌 Розширення браузера **Google Analytics Debugger** (Chrome)
-- 🔍 **GTM Preview Mode** — автоматично
-- 💻 У коді: `gtag('config', 'G-XXX', {'debug_mode': true})`
+| `click` | Кліки на зовнішні посилання |
+| `file_download` | Завантаження файлів (pdf, xlsx, zip...) |
+| `video_start/complete` | YouTube-відео |
+| `form_start/submit` | HTML-форми |
+| `view_search_results` | Внутрішній пошук |
 
 ---
 
-```mermaid
-sequenceDiagram
-    participant B as Браузер
-    participant D as DebugView
-    B->>D: page_view {page_title, page_location}
-    B->>D: scroll {percent_scrolled: 90}
-    B->>D: add_to_cart {item_id, value}
-    D-->>B: ✅ Відображення події
-```
+## Обмеження Enhanced Measurement
 
-**Затримка ~1–2 сек.** Незамінний при впровадженні та тестуванні.
+- ⚠️ Недостатня деталізація параметрів
+- ⚠️ Складно фільтрувати технічні кліки
+- ⚠️ Неможливо додати кастомні параметри
+- ⚠️ Проблеми з SPA (React, Vue)
+
+Розглядати як **стартову точку**, а не повноцінне рішення
 
 ---
 
-## Що важливо налаштувати одразу
+## DebugView 🔍
 
-### ☑️ Чеклист після створення ресурсу
+Перегляд подій **у реальному часі** під час тестування
 
-- [ ] Змінити **Data Retention** з 2 місяців на **14 місяців**
-- [ ] Перевірити **часовий пояс та валюту** у налаштуваннях property
-- [ ] Увімкнути / перевірити **Enhanced Measurement**
-- [ ] Встановити код відстеження та перевірити через **DebugView**
-- [ ] Зв'язати з **Google Search Console** та **Google Ads**
-
----
-
-## Підсумок лекції
+На відміну від стандартних звітів — **без затримки 24-48 годин**
 
 ```mermaid
 graph LR
-    A[Event-based модель] --> B[Кожна дія — подія з параметрами]
-    C[Property + Data Streams] --> D[Ієрархія та Measurement ID]
-    E[gtag.js або GTM] --> F[Встановлення відстеження]
-    G[Enhanced Measurement] --> H[Автоматичні події]
-    I[DebugView] --> J[Тестування в реальному часі]
+    A[DebugView] --> B[Активні пристрої]
+    A --> C[Timeline подій]
+    A --> D[Деталі події]
+    D --> E[Event Parameters]
+    D --> F[User Properties]
 ```
+
+---
+
+## Як увімкнути DebugView
+
+**Спосіб 1:** gtag.js — додати параметр:
+```javascript
+gtag('config', 'G-XXXXXX', { 'debug_mode': true });
+```
+
+**Спосіб 2:** GTM — використати **Preview mode** (рекомендовано)
+
+**Спосіб 3:** Chrome extension **Google Analytics Debugger**
+
+⚠️ Не залишайте debug mode в production!
+
+---
+
+## Типові помилки, які виявляє DebugView
+
+- 🔁 **Дубльовані події** — тригер спрацьовує кілька разів
+- ❌ **Відсутні параметри** — dataLayer variable не заповнена
+- 🔢 **Неправильний тип даних** — число надходить як рядок
+- 📄 **Подія на неправильній сторінці** — некоректний тригер
+
+---
+
+## Висновки
+
+GA4 — це **фундаментальна зміна парадигми**, а не оновлення
+
+**Event-based модель** → гнучкість і кросплатформенність
+
+**Ієрархія Account → Property → Stream** → зрозуміла організація
+
+**GTM + Enhanced Measurement** → швидкий старт без коду
+
+**DebugView** → валідація перед production
+
+Правильне налаштування з початку = якісні дані назавжди 🎯
