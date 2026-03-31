@@ -14,6 +14,8 @@
 | [Лекція 06 Технічне SEO — crawling та indexing](lectures/lec-06.md) | 2 |
 | [Лекція 07 Link building та off-page SEO](lectures/lec-07.md) | 2 |
 | [Лекція 08 Локальне SEO та токсичні посилання](lectures/lec-08.md) | 2 |
+| [Лекція 09 Google Analytics 4 — основи](lectures/lec-09.md) | 2 |
+| [Лекція 10 Google Analytics 4 — події, конверсії та атрибуція](lectures/lec-10.md) | 2 |
 
 ---
 
