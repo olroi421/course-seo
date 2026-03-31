@@ -160,7 +160,7 @@ graph TD
 
 ```mermaid
 graph LR
-    A[Вебсайт] --> B{Метод]
+    A[Вебсайт] --> B[Метод]
     B --> C[gtag.js]
     B --> D[Google Tag Manager]
     B --> E[Server-side GTM]
