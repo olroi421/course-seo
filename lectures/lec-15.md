@@ -136,9 +136,8 @@ Google Trends — безкоштовний інструмент, що показ
 
 ```mermaid
 xychart-beta
-    title "Умовна сезонність запиту купити ялинку"
-    x-axis [Січ, Лют, Бер, Кві, Тра, Чер, Лип, Сер, Вер, Жов, Лис, Ґру]
-    y-axis "Відносна популярність" 0 --> 100
+    x-axis [Sich, Lyut, Ber, Kvi, Tra, Cher, Lyp, Ser, Ver, Zhov, Lys, Hru]
+    y-axis "Vidnosna populyarnist" 0 --> 100
     bar [5, 2, 2, 1, 1, 1, 1, 1, 3, 10, 45, 100]
 ```
 
